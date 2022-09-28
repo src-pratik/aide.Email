@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using aide.Microsoft.Graph.Email;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Graph;
+using System.Text;
 
 Settings settings;
 string userId;
@@ -42,7 +44,11 @@ while (choice != 0)
         case 2:
             try
             {
-                await daemonService.SendTextMailAsync("Testing", "This is a test mail", userId, userId);
+                FileAttachment attachment = new FileAttachment();
+                attachment.ContentType = "text/plain";
+                attachment.Name = "Sample.txt";
+                attachment.ContentBytes = Encoding.ASCII.GetBytes("Testing data from the file.");
+                await daemonService.SendTextMailAsync("Testing : With Attachment. External Mail address", "This is a test mail. Please let me know you get the attachment in the mail. Text file with content.", userId, userId, new FileAttachment[] { attachment });
                 Console.WriteLine($"Mail Sent");
             }
             catch (Exception ex)

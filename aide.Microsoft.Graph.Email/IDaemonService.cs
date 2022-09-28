@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Graph;
+using System.Threading.Tasks;
 
 namespace aide.Microsoft.Graph.Email
 {
@@ -6,12 +7,12 @@ namespace aide.Microsoft.Graph.Email
     {
         Task<bool> HealthCheck(string userid);
 
-        Task SendHTMLMailAsync(string subject, string body, string from, string recipient);
+        Task SendHTMLMailAsync(string subject, string body, string from, string recipient, FileAttachment[]? attachments = null);
 
-        Task SendHTMLMailAsync(string subject, string body, string from, string[] recipients);
+        Task SendHTMLMailAsync(string subject, string body, string from, string[] recipients, FileAttachment[]? attachments = null);
 
-        Task SendTextMailAsync(string subject, string body, string from, string recipient);
+        Task SendTextMailAsync(string subject, string body, string from, string recipient, FileAttachment[]? attachments = null);
 
-        Task SendTextMailAsync(string subject, string body, string from, string[] recipients);
+        Task SendTextMailAsync(string subject, string body, string from, string[] recipients, FileAttachment[]? attachments = null);
     }
 }

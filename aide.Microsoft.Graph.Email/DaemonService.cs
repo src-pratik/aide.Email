@@ -59,27 +59,27 @@ namespace aide.Microsoft.Graph.Email
             return true;
         }
 
-        public async Task SendHTMLMailAsync(string subject, string body, string from, string recipient)
+        public async Task SendHTMLMailAsync(string subject, string body, string from, string recipient, FileAttachment[]? attachments = null)
         {
-            await SendMailAsync(subject, body, BodyType.Html, from, new string[] { recipient });
+            await SendMailAsync(subject, body, BodyType.Html, from, new string[] { recipient }, attachments);
         }
 
-        public async Task SendHTMLMailAsync(string subject, string body, string from, string[] recipients)
+        public async Task SendHTMLMailAsync(string subject, string body, string from, string[] recipients, FileAttachment[]? attachments = null)
         {
-            await SendMailAsync(subject, body, BodyType.Html, from, recipients);
+            await SendMailAsync(subject, body, BodyType.Html, from, recipients, attachments);
         }
 
-        public async Task SendTextMailAsync(string subject, string body, string from, string recipient)
+        public async Task SendTextMailAsync(string subject, string body, string from, string recipient, FileAttachment[]? attachments = null)
         {
-            await SendMailAsync(subject, body, BodyType.Text, from, new string[] { recipient });
+            await SendMailAsync(subject, body, BodyType.Text, from, new string[] { recipient }, attachments);
         }
 
-        public async Task SendTextMailAsync(string subject, string body, string from, string[] recipients)
+        public async Task SendTextMailAsync(string subject, string body, string from, string[] recipients, FileAttachment[]? attachments = null)
         {
-            await SendMailAsync(subject, body, BodyType.Text, from, recipients);
+            await SendMailAsync(subject, body, BodyType.Text, from, recipients, attachments);
         }
 
-        private async Task SendMailAsync(string subject, string body, BodyType bodyType, string from, string[] recipients)
+        private async Task SendMailAsync(string subject, string body, BodyType bodyType, string from, string[] recipients, FileAttachment[]? attachments = null)
         {
             // Ensure client isn't null
             _ = _userClient ??
@@ -99,6 +99,16 @@ namespace aide.Microsoft.Graph.Email
                     EmailAddress = new EmailAddress() { Address = x }
                 })
             };
+
+            if (attachments != null)
+            {
+                message.Attachments = new MessageAttachmentsCollectionPage();
+                message.HasAttachments = true;
+                foreach (var item in attachments)
+                {
+                    message.Attachments.Add(item);
+                }
+            }
 
             // Send the message
             await _userClient.Users[from]
